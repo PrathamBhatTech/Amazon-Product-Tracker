@@ -44,20 +44,20 @@ SellingPrice = None
 try:
     DealPrice = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
 
-finally:
+except:
     pass
 
 try:
     SellingPrice = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
 
-finally:
+except:
     pass
 
 # print(Price.prettify())
 
 print('Product Title: ', ProductTitle)
 print('Availability: ', Availability)
-print('MRP =', Mrp)
+# print('MRP =', Mrp)
 
 if DealPrice:
     print('Deal Price =', DealPrice)
