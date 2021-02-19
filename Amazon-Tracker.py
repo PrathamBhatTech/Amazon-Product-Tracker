@@ -36,11 +36,31 @@ ProductTitle = soup.find(id='productTitle').get_text().strip()
 Availability = soup.find(id='availability').get_text().strip()  # In stock.
 
 Price = soup.find(id='price')
-Mrp = int(soup.find(class_='priceBlockStrikePriceString a-text-strike').get_text().strip()[2:-3].replace(',', ''))
-DealPrice = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
+# Mrp = int(soup.find(class_='priceBlockStrikePriceString a-text-strike').get_text().strip()[2:-3].replace(',', ''))
+
+DealPrice = None
+SellingPrice = None
+
+try:
+    DealPrice = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
+
+finally:
+    pass
+
+try:
+    SellingPrice = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
+
+finally:
+    pass
 
 # print(Price.prettify())
+
 print('Product Title: ', ProductTitle)
 print('Availability: ', Availability)
 print('MRP =', Mrp)
-print('Deal Price =', DealPrice)
+
+if DealPrice:
+    print('Deal Price =', DealPrice)
+
+if SellingPrice:
+    print('Selling Price = ', SellingPrice)
