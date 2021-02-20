@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from os import name, system
 
+from time import sleep
+
 
 class AmazonTracker:
     def __init__(self):
@@ -18,7 +20,7 @@ class AmazonTracker:
             _ = system('clear')
 
     def get_url(self):
-        self.url = input("Please enter the url\n")
+        self.url = 'https://www.amazon.in/Boat-Rockerz-550-Headphone-Aesthetics/dp/B0856HY85J/ref=sr_1_3?dchild=1&keywords=boat+rockerz+550&qid=1613791382&sr=8-3'
 
     def connect(self):
         print("Please wait. We are attempting to connect to the product page\n\n")
@@ -90,8 +92,14 @@ class AmazonTracker:
             print('Selling Price = ', selling_price)
 
 
-if __name__ == '__main__':
+def start_check():
     obj = AmazonTracker()
     obj.get_url()
     obj.connect()
     obj.extract_data()
+
+
+if __name__ == '__main__':
+    while KeyboardInterrupt:
+        start_check()
+        sleep(20)  # Stops the code process for 20 seconds
