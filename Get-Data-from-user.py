@@ -41,6 +41,8 @@ class GetURL:
 
         self.c.execute('INSERT INTO TABLE USER(?, ?, ?, ?)', (username, email, check_freq, unit))
 
+        self.con.commit()
+
     def get_product_params(self):
         url = input('Copy the url from the product page and paste it below\n')
         max_price = input('Enter the max price of the product')
@@ -51,3 +53,5 @@ class GetURL:
 
         self.c.execute('INSERT INTO TABLE URL(?, ?, ?, ?)',
                        (url, max_price, availability_alert_email, availability_alert_notification))
+
+        self.con.commit()
