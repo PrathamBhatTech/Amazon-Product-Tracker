@@ -9,6 +9,7 @@ class AmazonTracker:
     def __init__(self):
         pass
 
+    # Clear the terminal window
     @staticmethod
     def clear():
         # for windows
@@ -22,6 +23,7 @@ class AmazonTracker:
     def get_url(self):
         self.url = 'https://www.amazon.in/Boat-Rockerz-550-Headphone-Aesthetics/dp/B0856HY85J/ref=sr_1_3?dchild=1&keywords=boat+rockerz+550&qid=1613791382&sr=8-3'
 
+    # connects to the webpage provided using the url
     def connect(self):
         print("Please wait. We are attempting to connect to the product page\n\n")
 
@@ -46,6 +48,7 @@ class AmazonTracker:
             print("Connection failed")
             exit()
 
+    # After the web page data is obtained the required data such as the product price is extracted.
     def extract_data(self):
         soup = BeautifulSoup(self.response.content, 'lxml')
 
@@ -62,6 +65,7 @@ class AmazonTracker:
         deal_price = None
         selling_price = None
 
+        # Exception handling is used to prevent the code from crashing if the required data is missing
         try:
             deal_price = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
 
@@ -85,6 +89,7 @@ class AmazonTracker:
         print('Availability: ', availability)
         # print('MRP =', Mrp)
 
+        # Print the data if it is found in the code
         if deal_price:
             print('Deal Price =', deal_price)
 
@@ -92,6 +97,7 @@ class AmazonTracker:
             print('Selling Price = ', selling_price)
 
 
+# Run the code with a url
 def start_check():
     obj = AmazonTracker()
     obj.get_url()
@@ -99,6 +105,7 @@ def start_check():
     obj.extract_data()
 
 
+# after the code runs once a break of 20 seconds is given before running again
 if __name__ == '__main__':
     while KeyboardInterrupt:
         start_check()
