@@ -1,10 +1,21 @@
 import requests
 from bs4 import BeautifulSoup
+from os import name, system
+
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+        # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
 
 url = input("Please enter the url\n")
-# url = 'https://www.amazon.in/Infinity-Glide-500-Wireless-Headphones/dp/B07W5MYRF4/ref=sr_1_1_sspa?crid=384417BZYUPRB&dchild=1&keywords=headphone+wireless&qid=1613395289&smid=A14CZOWI0VEHLG&sprefix=headph%2Caps%2C-1&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUExVkxNS1MwTkpGUVhWJmVuY3J5cHRlZElkPUEwNzc4NTExMTNTRkVZUTVHRzFTWCZlbmNyeXB0ZWRBZElkPUEwOTM4NDM1M0Y0VVYzUUhEUlhSOCZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU='
-# url = 'https://www.amazon.com/Sony-MDRZX110-BLK-Stereo-Headphones/dp/B00NJ2M33I/ref=sr_1_3?dchild=1&keywords=headphones&qid=1613717798&sr=8-3'
 
+# The headers are used to make the code imitate a browser and prevent amazon from block it access to the site.
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -14,7 +25,7 @@ headers = {
     'Connection': 'close'
 }
 
-print("Please wait. we are fetching the data\n\n")
+print("Please wait. We are attempting to connect to the product page\n\n")
 
 # Get the code of the product page using the url provided
 response = requests.get(url, headers=headers)
@@ -53,6 +64,11 @@ try:
 except:
     pass
 
+# Clear the screen
+clear()
+
+# ReviewScore = float(soup.select('.a-star-4-5')[0].get_text().split()[0].replace(',', '.'))
+
 # print(Price.prettify())
 
 print('Product Title: ', ProductTitle)
@@ -64,3 +80,5 @@ if DealPrice:
 
 if SellingPrice:
     print('Selling Price = ', SellingPrice)
+
+# print(ReviewScore)
