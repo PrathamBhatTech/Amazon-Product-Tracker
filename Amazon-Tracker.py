@@ -1,27 +1,28 @@
+# used to get the data from webpages when url is provided
 import requests
-from bs4 import BeautifulSoup
-from os import name, system
 
+# Used to parse data provided by requests to extract the data required
+from bs4 import BeautifulSoup
+
+# used to delay the code for a set amount of time
 from time import sleep
+
+# miscellaneous functions that are repeated but simple
+from MiscFunctions import *
+
+# Import the sql functions that access database
+from SQL_Functions import Database
+
+from Send_Email import send_mail
 
 
 class AmazonTracker:
-    def __init__(self):
-        pass
-
-    # Clear the terminal window
-    @staticmethod
-    def clear():
-        # for windows
-        if name == 'nt':
-            _ = system('cls')
-
-        # for mac and linux(here, os.name is 'posix')
-        else:
-            _ = system('clear')
-
-    def get_url(self):
-        self.url = 'https://www.amazon.in/Boat-Rockerz-550-Headphone-Aesthetics/dp/B0856HY85J/ref=sr_1_3?dchild=1&keywords=boat+rockerz+550&qid=1613791382&sr=8-3'
+    def __init__(self, url):
+        self.url = url
+    
+    # def get_url(self):
+    #     self.url = Database.access_product_params()[0]
+    #     print(self.url)
 
     # connects to the webpage provided using the url
     def connect(self):
@@ -79,7 +80,7 @@ class AmazonTracker:
             pass
 
         # Clear the screen
-        self.clear()
+        clear()
 
         # ReviewScore = float(soup.select('.a-star-4-5')[0].get_text().split()[0].replace(',', '.'))
 
@@ -96,17 +97,28 @@ class AmazonTracker:
         if selling_price:
             print('Selling Price = ', selling_price)
 
+        to_addr = self.c.execute('SELECT email FROM USER')
+        name = self.c.execute('SELECT name FROM USER')
+
+        print(to_addr + '\n' + name)
+
+        if selling_price <= self.c.execute(f'SELECT maxPrice FROM URL WHERE url={url}'):
+            send_mail(to_addr, name, product_title, url)
+
+        print('Enter ctrl + c to exit code')
+
 
 # Run the code with a url
-def start_check():
-    obj = AmazonTracker()
-    obj.get_url()
+def start_check(url):
+    obj = AmazonTracker(url)
     obj.connect()
     obj.extract_data()
 
 
 # after the code runs once a break of 20 seconds is given before running again
-if __name__ == '__main__':
-    while KeyboardInterrupt:
-        start_check()
-        sleep(20)  # Stops the code process for 20 seconds
+
+while KeyboardInterrupt:
+    urls = Database.c.execute('SELECT url FROM URL')
+    for url in range(urls):
+        start_check(url)
+    sleep(20)  # Stops the code process for 20 seconds

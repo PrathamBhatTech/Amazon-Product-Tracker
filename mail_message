@@ -1,0 +1,7 @@
+Hi {name},
+
+The price of the product {product} has gone below the threshold you have entered.
+Buy as soon as possible.
+Here is the link {productLink}
+
+THIS IS AN AUTOMATED EMAIL. PLEASE DO NOT REPLY.

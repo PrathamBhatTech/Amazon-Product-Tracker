@@ -1,12 +1,16 @@
+# used to check if a given file exists or not
 import os.path
 
+# used to create, modify and store database files using sql
 import sqlite3 as sql
 
+# miscellaneous functions that are repeated but simple
 from MiscFunctions import *
 
 
-class GetURL:
+class Database:
     def __init__(self):
+        # If the file does not exist then create one and ask user for email and check frequency
         if not self.file_exists():
             self.connect()
             self.create_tables()
@@ -14,6 +18,11 @@ class GetURL:
         else:
             self.connect()
 
+    '''
+        These functions will get data from user and store it in the database
+    '''
+
+    # Checks if a given file exists
     @staticmethod
     def file_exists():
         if os.path.isfile('Database.db'):
@@ -21,6 +30,7 @@ class GetURL:
         else:
             return False
 
+    # Attempts connection to the database file
     def connect(self):
         try:
             self.con = sql.connect('Database.db')
@@ -28,12 +38,15 @@ class GetURL:
             print(sql.Error)
             exit()
 
+        # Create a cursor using the connection to the database
         self.c = self.con.cursor()
 
+    # Create tables url and user for first time initialization
     def create_tables(self):
         self.c.execute('CREATE TABLE URL(url, maxPrice, availabilityAlertEmail, availabilityAlertNotification)')
         self.c.execute('CREATE TABLE USER(username, email, checkFrequency)')
 
+    # Gets the user data from user
     def get_user_data(self):
         username = input('Enter your name')
         email = get_email()
@@ -55,3 +68,20 @@ class GetURL:
                        (url, max_price, availability_alert_email, availability_alert_notification))
 
         self.con.commit()
+
+    '''
+        From here the functions will access the database to return values
+    '''
+
+    def access_user_data(self):
+        user = self.c.execute("SELECT * FROM USER")
+        username, email, check_freq = user
+        return username, email, check_freq
+
+    def access_product_params(self):
+        params = self.c.execute("SELECT * FROM URL")
+        return params
+
+    def insert_product_data(self, url, maxPrice, availabilityAlertEmail, availabilityAlertNotification):
+        self.c.execute('INSERT INTO URL(?, ?, ?, ?)',
+                       (url, maxPrice, availabilityAlertEmail, availabilityAlertNotification))
