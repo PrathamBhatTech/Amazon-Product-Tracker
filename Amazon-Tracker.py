@@ -18,16 +18,16 @@ from Send_Email import send_mail
 
 class AmazonTracker:
     def __init__(self):
-        self.urls, self.maxPrices, _ = db.access_product_params()
-        print(self.maxPrices)
-        for url in self.urls:
-            self.url = url
+        params = db.access_product_params()
+        for param in params:
+            self.url = param[0]
+            self.maxPrice = int(param[1])
             self.connect()
             self.extract_data()
 
     # connects to the webpage provided using the url
     def connect(self):
-        print("Please wait. We are attempting to connect to the product page\n\n")
+        print("\n\nPlease wait. We are attempting to connect to the product page")
 
         # The headers are used to make the code imitate a browser and prevent amazon from block it access to the site.
         headers = {
@@ -45,7 +45,7 @@ class AmazonTracker:
 
         # code proceeds only if the connection to the product page is successful
         if self.response:
-            print("Connected successfully\n\nProcessing data. Please wait")
+            print("Connected successfully\nProcessing data. Please wait\n\n")
         else:
             print("Connection failed")
             exit()
@@ -75,13 +75,13 @@ class AmazonTracker:
             pass
 
         try:
-            selling_price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
+            price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
 
         except:
             pass
 
         # Clear the screen
-        clear()
+        # clear()
 
         # ReviewScore = float(soup.select('.a-star-4-5')[0].get_text().split()[0].replace(',', '.'))
 
@@ -95,25 +95,22 @@ class AmazonTracker:
         if deal_price:
             print('Deal Price =', deal_price)
 
-        if selling_price:
-            print('Selling Price = ', selling_price)
-
-        # to_addr = self.c.execute('SELECT email FROM USER')
-        # name = self.c.execute('SELECT name FROM USER')
+        if price:
+            print('Price = ', price)
 
         name, to_addr, checkFreq = db.access_user_data()
 
-        print(to_addr + '\n' + name)
-
-        if selling_price <= int(self.maxPrices[self.urls.index(self.url)]):
+        print(self.maxPrice)
+        if price <= self.maxPrice:
             send_mail(to_addr, name, product_title, self.url)
 
-        print('Enter ctrl + c to exit code')
 
 # after the code runs once a break of 20 seconds is given before running again
-
 while KeyboardInterrupt:
     db = Database()
     AmazonTracker()
+
+    print('All products have been checked\n')
+    print('Enter ctrl + c to exit code')
 
     sleep(20)  # Stops the code process for 20 seconds

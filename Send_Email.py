@@ -8,7 +8,7 @@ def send_mail(to_addr, name, product, productLink):
     username, password = 'python.smtp.pbtron@gmail.com', 'python123$'
 
     # Create a server. 25 is the port. port is 25 for smtp.
-    server = smtplib.SMTP('smtp.gmail.com', 25)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
 
     # Initiate the service
     server.ehlo()
@@ -35,4 +35,4 @@ def send_mail(to_addr, name, product, productLink):
 
     server.sendmail(username, to_addr, text)
 
-    print("Mail Sent")
+    print("Mail Sent to ", to_addr)

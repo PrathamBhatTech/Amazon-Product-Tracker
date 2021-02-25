@@ -1,7 +1,7 @@
-Hi {name},
+Hi {},
 
-The price of the product {product} has gone below the threshold you have entered.
+The price of the product {} has gone below the threshold you have entered.
 Buy as soon as possible.
-Here is the link {productLink}
+Here is the link {}
 
 THIS IS AN AUTOMATED EMAIL. PLEASE DO NOT REPLY.

@@ -75,7 +75,8 @@ class Database:
 
     def access_user_data(self):
         user = self.c.execute("SELECT * FROM USER").fetchone()
-        return user
+        username, email, check_freq = user
+        return username, email, check_freq
 
     def access_product_params(self):
         params = self.c.execute("SELECT * FROM URL").fetchall()
