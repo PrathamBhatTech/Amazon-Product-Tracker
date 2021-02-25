@@ -14,7 +14,7 @@ class Database:
         if not self.file_exists():
             self.connect()
             self.create_tables()
-            self.get_user_data()
+            # self.get_user_data()
         else:
             self.connect()
 
@@ -52,7 +52,7 @@ class Database:
         email = get_email()
         check_freq, unit = get_check_freq()
 
-        self.c.execute('INSERT INTO TABLE USER(?, ?, ?, ?)', (username, email, check_freq, unit))
+        self.c.execute('INSERT INTO USER VALUES(?, ?, ?)', (username, email, check_freq))
 
         self.con.commit()
 
@@ -64,7 +64,7 @@ class Database:
         availability_alert_notification = input('Enter true for false if you want to get an notification alert when'
                                                 ' the price of the product falls below the max price')
 
-        self.c.execute('INSERT INTO TABLE URL(?, ?, ?, ?)',
+        self.c.execute('INSERT INTO URL VALUES(?, ?, ?, ?)',
                        (url, max_price, availability_alert_email, availability_alert_notification))
 
         self.con.commit()
@@ -74,14 +74,9 @@ class Database:
     '''
 
     def access_user_data(self):
-        user = self.c.execute("SELECT * FROM USER")
-        username, email, check_freq = user
-        return username, email, check_freq
+        user = self.c.execute("SELECT * FROM USER").fetchone()
+        return user
 
     def access_product_params(self):
-        params = self.c.execute("SELECT * FROM URL")
+        params = self.c.execute("SELECT * FROM URL").fetchall()
         return params
-
-    def insert_product_data(self, url, maxPrice, availabilityAlertEmail, availabilityAlertNotification):
-        self.c.execute('INSERT INTO URL(?, ?, ?, ?)',
-                       (url, maxPrice, availabilityAlertEmail, availabilityAlertNotification))

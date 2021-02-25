@@ -17,12 +17,13 @@ from Send_Email import send_mail
 
 
 class AmazonTracker:
-    def __init__(self, url):
-        self.url = url
-    
-    # def get_url(self):
-    #     self.url = Database.access_product_params()[0]
-    #     print(self.url)
+    def __init__(self):
+        self.urls, self.maxPrices, _ = db.access_product_params()
+        print(self.maxPrices)
+        for url in self.urls:
+            self.url = url
+            self.connect()
+            self.extract_data()
 
     # connects to the webpage provided using the url
     def connect(self):
@@ -97,28 +98,22 @@ class AmazonTracker:
         if selling_price:
             print('Selling Price = ', selling_price)
 
-        to_addr = self.c.execute('SELECT email FROM USER')
-        name = self.c.execute('SELECT name FROM USER')
+        # to_addr = self.c.execute('SELECT email FROM USER')
+        # name = self.c.execute('SELECT name FROM USER')
+
+        name, to_addr, checkFreq = db.access_user_data()
 
         print(to_addr + '\n' + name)
 
-        if selling_price <= self.c.execute(f'SELECT maxPrice FROM URL WHERE url={url}'):
-            send_mail(to_addr, name, product_title, url)
+        if selling_price <= int(self.maxPrices[self.urls.index(self.url)]):
+            send_mail(to_addr, name, product_title, self.url)
 
         print('Enter ctrl + c to exit code')
-
-
-# Run the code with a url
-def start_check(url):
-    obj = AmazonTracker(url)
-    obj.connect()
-    obj.extract_data()
-
 
 # after the code runs once a break of 20 seconds is given before running again
 
 while KeyboardInterrupt:
-    urls = Database.c.execute('SELECT url FROM URL')
-    for url in range(urls):
-        start_check(url)
+    db = Database()
+    AmazonTracker()
+
     sleep(20)  # Stops the code process for 20 seconds

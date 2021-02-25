@@ -34,3 +34,5 @@ def send_mail(to_addr, name, product, productLink):
     text = msg.as_string()
 
     server.sendmail(username, to_addr, text)
+
+    print("Mail Sent")
