@@ -67,12 +67,16 @@ class Database:
             availability_alert_notification = input('Enter true for false if you want to get an notification alert when'
                                                     ' the price of the product falls below the max price\n')
 
+            # Insert the received values into the sql database
             self.c.execute('INSERT INTO URL VALUES(?, ?, ?, ?)',
                            (url, max_price, availability_alert_email, availability_alert_notification))
 
+            # commits the changes made to the database
             self.con.commit()
 
             print('\n\nDo you want to enter another product link? y/n\n')
+
+            # If the user doesn't enter y then the url access function is terminated.
             if input() != 'y':
                 break
 
@@ -81,10 +85,8 @@ class Database:
     '''
 
     def access_user_data(self):
-        user = self.c.execute("SELECT * FROM USER").fetchone()
-        username, email, check_freq = user
-        return username, email, check_freq
+        return self.c.execute("SELECT * FROM USER").fetchone()
 
     def access_product_params(self):
-        params = self.c.execute("SELECT * FROM URL").fetchall()
-        return params
+        # params = self.c.execute("SELECT * FROM URL").fetchall()
+        return self.c.execute("SELECT * FROM URL").fetchall()
