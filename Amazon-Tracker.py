@@ -5,18 +5,20 @@ import requests
 from bs4 import BeautifulSoup
 
 # used to delay the code for a set amount of time
-from time import sleep
 
 # miscellaneous functions that are repeated but simple
-from MiscFunctions import *
+from OtherFunctions.MiscFunctions import *
 
 # Import the sql functions that access database
-from SQL_Functions import Database
+from OtherFunctions.SQL_Functions import Database
 
-from Send_Email import send_mail
+from OtherFunctions.Send_Email import send_mail
 
 
 class AmazonTracker:
+
+    # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
+    # and asks for user details and product urls
     def __init__(self):
         params = db.access_product_params()
         for param in params:

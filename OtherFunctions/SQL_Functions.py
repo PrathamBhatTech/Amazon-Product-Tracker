@@ -5,7 +5,7 @@ import os.path
 import sqlite3 as sql
 
 # miscellaneous functions that are repeated but simple
-from MiscFunctions import *
+from OtherFunctions.MiscFunctions import *
 
 
 class Database:
@@ -27,7 +27,7 @@ class Database:
     # Checks if a given file exists
     @staticmethod
     def file_exists():
-        if os.path.isfile('Database.db'):
+        if os.path.isfile('OtherFunctions/Database.db'):
             return True
         else:
             return False
@@ -35,7 +35,7 @@ class Database:
     # Attempts connection to the database file
     def connect(self):
         try:
-            self.con = sql.connect('Database.db')
+            self.con = sql.connect('OtherFunctions/Database.db')
         except sql.Error:
             print(sql.Error)
             exit()

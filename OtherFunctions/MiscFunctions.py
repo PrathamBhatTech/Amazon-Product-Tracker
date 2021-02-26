@@ -15,6 +15,7 @@ def get_email():
             return email
 
 
+# Gets the frequency for which the program should run.
 def get_check_freq():
     unit = input("Enter the check frequency unit sec, min, hour, day\n")
     check_freq = input("Enter the frequency for which you want the product data to be checked in " + unit + '\n')
