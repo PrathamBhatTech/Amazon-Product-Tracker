@@ -16,12 +16,13 @@ def get_email():
 
 
 def get_check_freq():
-    unit = input("Enter the check frequency unit sec, min, hour, day")
-    check_freq = input("Enter the frequency for which you want the product data to be checked in " + unit)
+    unit = input("Enter the check frequency unit sec, min, hour, day\n")
+    check_freq = input("Enter the frequency for which you want the product data to be checked in " + unit + '\n')
 
     return check_freq  # , unit
 
 
+# TODO Remove the _ = if clear is used and see if it woks.
 def clear():
     # for windows
     if name == 'nt':
