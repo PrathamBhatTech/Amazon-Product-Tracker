@@ -102,7 +102,7 @@ class AmazonTracker:
 
         print(self.maxPrice)
         if price <= self.maxPrice:
-            send_mail(to_addr, name, product_title, self.url)
+            send_mail(to_addr, name, product_title, price, self.url)
 
 
 # after the code runs once a break of 20 seconds is given before running again

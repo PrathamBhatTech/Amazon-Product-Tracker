@@ -50,7 +50,7 @@ class Database:
     def get_user_data(self):
         username = input('Enter your name')
         email = get_email()
-        check_freq, unit = get_check_freq()
+        check_freq = get_check_freq()
 
         self.c.execute('INSERT INTO USER VALUES(?, ?, ?)', (username, email, check_freq))
 
