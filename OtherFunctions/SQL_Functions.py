@@ -45,12 +45,12 @@ class Database:
 
     # Create tables url and user for first time initialization
     def create_tables(self):
-        self.c.execute('CREATE TABLE URL(url, maxPrice, availabilityAlertEmail, availabilityAlertNotification)')
+        self.c.execute('CREATE TABLE URL(product_id, url, maxPrice)')
         self.c.execute('CREATE TABLE USER(username, email, checkFrequency)')
 
     # Gets the user data from user
     def get_user_data(self):
-        username = input('Enter your name')
+        username = input('Enter your name: ')
         email = get_email()
         check_freq = get_check_freq()
 
@@ -62,14 +62,14 @@ class Database:
         while True:
             url = input('Copy the url from the product page and paste it below\n')
             max_price = input('Enter the max price of the product\n')
-            availability_alert_email = input('Enter true for false if you want to get an'
-                                             ' email alert when the price of the product falls below the max price\n')
-            availability_alert_notification = input('Enter true for false if you want to get an notification alert when'
-                                                    ' the price of the product falls below the max price\n')
+
+            product_id = len(self.c.execute("SELECT product_id FROM URL").fetchall()) + 1
+            if self.c.execute("SELECT product_id FROM URL").fetchone() == "1":
+                product_id -= 1
 
             # Insert the received values into the sql database
-            self.c.execute('INSERT INTO URL VALUES(?, ?, ?, ?)',
-                           (url, max_price, availability_alert_email, availability_alert_notification))
+            self.c.execute('INSERT INTO URL VALUES(?, ?, ?)',
+                           (product_id, url, max_price))
 
             # commits the changes made to the database
             self.con.commit()
@@ -88,5 +88,14 @@ class Database:
         return self.c.execute("SELECT * FROM USER").fetchone()
 
     def access_product_params(self):
-        # params = self.c.execute("SELECT * FROM URL").fetchall()
         return self.c.execute("SELECT * FROM URL").fetchall()
+
+    def remove_product(self, product_id):
+        self.c.execute("DELETE FROM URL WHERE product_id = " + str(product_id))
+        print("The product has been removed")
+        self.rearrange_accounts(int(product_id))
+
+    def rearrange_accounts(self, deleted_product_id):
+        for i in range(deleted_product_id, len(self.c.execute("SELECT product_id FROM URL").fetchall()) + 2):
+            self.c.execute("UPDATE URL SET product_id = ? WHERE product_id = ?", (i - 1, i))
+        self.con.commit()
