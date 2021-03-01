@@ -1,5 +1,4 @@
 # Amazon Tracker
-This project is created for <b>Space Jam Hackathon</b>
 
 The <b>Amazon Tracker</b> stores the urls entered by the user and the email of the user and checks all the urls.
 When the price falls below the max price an email and notification is sent to the user.
