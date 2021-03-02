@@ -16,3 +16,5 @@ message = client.messages.create(
     to = '+919342581008',
     body = 'This is a test for python sms'
 )
+
+print(message.sid)
