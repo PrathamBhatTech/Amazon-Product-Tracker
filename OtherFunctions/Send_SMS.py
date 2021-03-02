@@ -7,7 +7,7 @@ from twilio.rest import Client
 account_sid = 'AC2b9b3923e7391dd37e6cf793dde22e3b'
 auth_token = 'c873b6301629c94ea63f50ba2bec0818'
 
-client = Client(account_sid, auth_token)
+client = Client(account_sid = account_sid, auth_token)
 
 #Writing a message
 
