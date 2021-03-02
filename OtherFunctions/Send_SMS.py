@@ -1,13 +1,13 @@
 #importing twilio client
 
 from twilio.rest import Client
-
+import os
 #Taking Account SID and authentication token from twilio.com
 
 account_sid = 'AC2b9b3923e7391dd37e6cf793dde22e3b'
-auth_token = 'c873b6301629c94ea63f50ba2bec0818'
+auth_token = '73e05c2e1af8d22379cb305d0d55cddd'
 
-client = Client(account_sid = account_sid, auth_token)
+client = Client(account_sid, auth_token)
 
 #Writing a message
 
