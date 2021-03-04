@@ -27,7 +27,7 @@ class AmazonTracker:
             self.debug = debug
 
             params = db.access_product_params()
-            self.name, self.to_addr, self.check_freq = db.access_user_data()
+            self.name, self.to_addr, self.number, self.check_freq = db.access_user_data()
             self.check_freq = float(self.check_freq)
             for param in params:
                 self.product_id = param[0]
