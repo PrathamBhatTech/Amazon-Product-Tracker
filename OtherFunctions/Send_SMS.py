@@ -8,13 +8,14 @@ def send_sms(number):
     auth_token = '56a580fdbe1c8d88fdb9768992f55af4'
 
     client = Client(account_sid, auth_token)
-
+    name = 'Prateek'
+    product = 'Amazin Kindle Version 4 Ebook Reader Pro Max Blah Blah'
+    price = 2900
     #Writing a message
-    f = open('OtherFunctions/mail_message.md', 'r+')
     message = client.messages.create(
         from_= '+14124538097',
         to = number,
-        body = f.read.format(name, product[0:3], price)
+        body = 'Hi ' + name + ' your product ' + ' '.join(p.split()[0:5]) + ' ...has come down to price of ' + str(price) + '. ' + 'Please check email for url' + '\nDO NOT REPLY'
     )   
 
 
