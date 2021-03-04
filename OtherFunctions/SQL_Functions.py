@@ -46,15 +46,16 @@ class Database:
     # Create tables url and user for first time initialization
     def create_tables(self):
         self.c.execute('CREATE TABLE URL(product_id, url, maxPrice)')
-        self.c.execute('CREATE TABLE USER(username, email, checkFrequency)')
+        self.c.execute('CREATE TABLE USER(username, email, number, checkFrequency)')
 
     # Gets the user data from user
     def get_user_data(self):
         username = input('Enter your name: ')
         email = get_email()
+        number = get_number()
         check_freq = get_check_freq()
 
-        self.c.execute('INSERT INTO USER VALUES(?, ?, ?)', (username, email, check_freq))
+        self.c.execute('INSERT INTO USER VALUES(?, ?, ?, ?)', (username, email, number, check_freq))
 
         self.con.commit()
 
