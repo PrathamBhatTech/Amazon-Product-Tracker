@@ -21,7 +21,7 @@ def get_number():
             print('Error: Please input valid phone number' )
             sleep(2)
         else:
-            return ('+91' + number)
+            return '+91' + number
 
 # Gets the frequency for which the program should run.
 def get_check_freq():
