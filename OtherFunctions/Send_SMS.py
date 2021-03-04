@@ -3,14 +3,11 @@
 from twilio.rest import Client
 #Taking Account SID and authentication token from twilio.com
 
-def send_sms(number):
+def send_sms(product, price, number):
     account_sid = 'AC2b9b3923e7391dd37e6cf793dde22e3b'
     auth_token = '56a580fdbe1c8d88fdb9768992f55af4'
 
     client = Client(account_sid, auth_token)
-    name = 'Prateek'
-    product = 'Amazin Kindle Version 4 Ebook Reader Pro Max Blah Blah'
-    price = 2900
     #Writing a message
     message = client.messages.create(
         from_= '+14124538097',
@@ -18,5 +15,4 @@ def send_sms(number):
         body = 'Hi ' + name + ' your product ' + ' '.join(p.split()[0:5]) + ' ...has come down to price of ' + str(price) + '. ' + 'Please check email for url' + '\nDO NOT REPLY'
     )   
 
-
-send_sms('+919342581008')
+    print('SMS sent to: ', number)
