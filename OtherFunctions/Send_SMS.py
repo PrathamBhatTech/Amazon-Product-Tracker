@@ -13,10 +13,10 @@ def send_sms(number):
 
     message = client.messages.create(
         from_= '+14124538097',
-        to = 'number',
+        to = number,
         with open('OtherFunctions/mail_message.md', 'r+') as f:
             body = f.read.format(name, product[0:3], price)
     )   
 
 
-send_sms(number)
+send_sms('+919342581008'))
