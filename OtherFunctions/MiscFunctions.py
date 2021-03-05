@@ -14,6 +14,14 @@ def get_email():
         else:
             return email
 
+def get_number():
+    while True:
+        number = input("Please enter your phone number for alert notifications: ")
+        if len(number) != 10:
+            print('Error: Please input valid phone number' )
+            sleep(2)
+        else:
+            return '+91' + number
 
 # Gets the frequency for which the program should run.
 def get_check_freq():

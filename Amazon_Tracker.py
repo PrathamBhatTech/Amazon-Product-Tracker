@@ -15,6 +15,8 @@ from OtherFunctions.SQL_Functions import Database
 
 from OtherFunctions.Send_Email import send_mail
 
+#Import module to send sms 
+from OtherFunctions.Send_SMS import send_sms
 
 class AmazonTracker:
     # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
@@ -25,7 +27,7 @@ class AmazonTracker:
             self.debug = debug
 
             params = db.access_product_params()
-            self.name, self.to_addr, self.check_freq = db.access_user_data()
+            self.name, self.to_addr, self.number, self.check_freq = db.access_user_data()
             self.check_freq = float(self.check_freq)
             for param in params:
                 self.product_id = param[0]
@@ -117,7 +119,7 @@ class AmazonTracker:
     def send_alert(self):
         if self.price <= self.maxPrice:
             send_mail(self.to_addr, self.name, self.product_title, self.price, self.url)
-
+            send_sms(self.name, self.product_title, self.price, self.number)
 
 db = Database()
 if __name__ == '__main__':
