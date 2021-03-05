@@ -1,8 +1,9 @@
 # Amazon Tracker
 
-The <b>Amazon Tracker</b> stores the urls entered by the user and the email of the user and checks all the urls.
+<b>Amazon Tracker</b> stores the product urls entered by the user and the email of the user and
+checks all the product data from the provided urls.<br>
 When the price falls below the max price an email and notification is sent to the user.
-
+<br>
 User Manual:
 
     > cd into the directory of the project and type: pip install -r requirements.txt
@@ -14,7 +15,7 @@ User Manual:
 
     > If you want to add new products or remove products later on, click on Product_Manager.py
       and follow the instructions.
-
+<br>
 Contributors:
 
     Pratham Bhat
