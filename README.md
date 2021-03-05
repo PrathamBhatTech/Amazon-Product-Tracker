@@ -18,10 +18,11 @@ User Manual:
 Contributors:
 
     Pratham Bhat
-        > Storing urls and email using sql
+        > Storing urls, email, names and max price of products using sql
         > Accessing html product data using requests
-        > Processing html to get information
-        > Sending email if price is less than threshold
-        > UI for adding and removing urls
+        > Processing html to get information such as price and product title
+        > Sending email if price drops below the threshold
+        > CUI for adding and removing urls
 
-        > Basically everything
+    Prateek Pangal Rao
+        > Sending SMS to user's phone for price drop alerts
