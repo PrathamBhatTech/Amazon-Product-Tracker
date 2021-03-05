@@ -22,7 +22,10 @@ from OtherFunctions.Send_SMS import send_sms
 class AmazonTracker:
     # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
     # and asks for user details and product urls
-    def __init__(self, alert_confirmation=False, loop=True, debug=False):
+    def __init__(self, alert_confirmation_email=False, alert_confirmation_sms=False, loop=True, debug=False):
+        self.alert_confirmation_email = alert_confirmation_email
+        self.alert_confirmation_sms = alert_confirmation_sms
+
         print('Accessing product data. If you are tracking many products this may take a while.')
         while KeyboardInterrupt:
             self.debug = debug
@@ -38,8 +41,7 @@ class AmazonTracker:
                 self.connect()
                 self.extract_data()
 
-                if alert_confirmation:
-                    self.send_alert()
+                self.send_alert()
 
             print('\n\nAll products have been checked\n')
 
@@ -119,11 +121,13 @@ class AmazonTracker:
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):
         if self.price <= self.maxPrice:
-            send_mail(self.to_addr, self.name, self.product_title, self.price, self.url)
-            send_sms(self.name, self.product_title, self.price, self.number)
+            if self.alert_confirmation_email:
+                send_mail(self.to_addr, self.name, self.product_title, self.price, self.url)
+            if self.alert_confirmation_sms:
+                send_sms(self.name, self.product_title, self.price, self.number)
 
 
 db = Database()
 if __name__ == '__main__':
     # The one is telling the constructor to enable user alerts.
-    AmazonTracker(alert_confirmation=True)
+    AmazonTracker(alert_confirmation_email=True, alert_confirmation_sms=False)
