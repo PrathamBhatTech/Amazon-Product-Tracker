@@ -19,7 +19,7 @@ from OtherFunctions.Send_Email import send_mail
 class AmazonTracker:
     # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
     # and asks for user details and product urls
-    def __init__(self, alert_confirmation, loop=True, debug=False):
+    def __init__(self, alert_confirmation=False, loop=True, debug=False):
         print('Accessing product data. If you are tracking many products this may take a while.')
         while KeyboardInterrupt:
             self.debug = debug

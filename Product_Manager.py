@@ -6,7 +6,7 @@ from OtherFunctions.MiscFunctions import clear
 
 while KeyboardInterrupt:
     # This tells the constructor to disable alerts
-    AT = AmazonTracker(alert_confirmation=False, loop=False)
+    AT = AmazonTracker(loop=False)
 
     option = input('1: Add products\n'
                    '2: Remove products\n'
