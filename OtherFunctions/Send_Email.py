@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-def send_mail(to_addr, name, product, price, productLink):
+def send_mail(to_addr, name, product, price, product_link):
     # username and password of the mail.
     username, password = 'python.smtp.pbtron@gmail.com', 'python123$'
 
@@ -26,7 +26,7 @@ def send_mail(to_addr, name, product, price, productLink):
 
     # Getting the text from the text file and adding it to the text
     with open('OtherFunctions/mail_message.md', 'r+') as f:
-        message = f.read().format(name, product, price, productLink)
+        message = f.read().format(name, product, price, product_link)
 
     msg.attach(MIMEText(message, 'plain'))
 
