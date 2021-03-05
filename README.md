@@ -3,7 +3,7 @@
 <b>Amazon Tracker</b> stores the product urls entered by the user and the email of the user and
 checks all the product data from the provided urls.<br>
 When the price falls below the max price an email and notification is sent to the user.
-<br>
+<br><br><br>
 User Manual:
 
     > cd into the directory of the project and type: pip install -r requirements.txt
