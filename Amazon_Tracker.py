@@ -134,4 +134,4 @@ class AmazonTracker:
 db = Database()
 if __name__ == '__main__':
     # The one is telling the constructor to enable user alerts.
-    AmazonTracker(alert_confirmation_email=True, alert_confirmation_sms=True)
+    AmazonTracker(alert_confirmation_email=True, alert_confirmation_sms=False)
