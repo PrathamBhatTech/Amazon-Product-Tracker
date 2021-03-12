@@ -24,11 +24,11 @@ When the price falls below the max price an email and notification is sent to th
 ## **Contributors:**
 
 *Pratham Bhat*
-        > Storing urls, email, names and max price of products using sql
-        > Accessing html product data using requests
-        > Processing html to get information such as price and product title
-        > Sending email if price drops below the threshold
-        > CUI for adding and removing urls
+    > Storing urls, email, names and max price of products using sql
+    > Accessing html product data using requests
+    > Processing html to get information such as price and product title
+    > Sending email if price drops below the threshold
+    > CUI for adding and removing urls
 
 *Prateek Rao*
         > Sending SMS to user's phone for price drop alerts
