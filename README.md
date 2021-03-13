@@ -5,7 +5,7 @@ checks all the product data from the provided urls.<br>
 When the price falls below the max price an email and notification is sent to the user.
 <br><br><br>
 
-### **User Manual:**
+>### **User Manual:**
 
 * ```cd``` into the directory of the project and type: 
         ```
@@ -21,7 +21,7 @@ When the price falls below the max price an email and notification is sent to th
   and follow the instructions.
 <br>
 
-### **Contributors:**
+>### **Contributors:**
 
 *Pratham Bhat*
 * Storing urls, email, names and max price of products using sql
