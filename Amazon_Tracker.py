@@ -84,7 +84,7 @@ class AmazonTracker:
         soup = BeautifulSoup(self.response.content, 'lxml')
 
         deal_price = None
-        self.price = None
+        price = None
 
         # Extracting data from the amazon html code
         self.product_title = soup.find(id='productTitle').get_text().strip()
@@ -96,13 +96,13 @@ class AmazonTracker:
         try:
             deal_price = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
 
-        except:
+        except AttributeError:
             pass
 
         try:
-            self.price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
+            price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
 
-        except:
+        except AttributeError:
             pass
 
         print("\nProduct ID: ", self.product_id)
@@ -112,22 +112,30 @@ class AmazonTracker:
         # Print the data if it is found in the code
         if deal_price:
             print('\tDeal Price =', deal_price)
+            self.final_price = deal_price
 
-        if self.price:
-            print('\tPrice = ', self.price)
+        if price:
+            if type(self.price) == "<class 'bs4.element.Tag'>":
+                self.final_price = deal_price
+            else:
+                self.final_price = price
+                print('\tPrice = ', price)
 
         print('\tMax price set by user = ', self.maxPrice)
 
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):
-        if self.price <= self.maxPrice:
-            if self.alert_confirmation_email:
-                send_mail(self.to_addr, self.name, self.product_title, self.price, self.url)
-            if self.alert_confirmation_sms:
-                send_sms(self.name, self.product_title, self.price, self.number)
+        try:
+            if self.final_price <= self.maxPrice:
+                if self.alert_confirmation_email:
+                    send_mail(self.to_addr, self.name, self.product_title, self.final_price, self.url)
+                if self.alert_confirmation_sms:
+                    send_sms(self.name, self.product_title, self.final_price, self.number)
+        except AttributeError:
+            print("\n\tERROR: Could not access the price of the product")
 
 
 db = Database()
 if __name__ == '__main__':
     # The one is telling the constructor to enable user alerts.
-    AmazonTracker(alert_confirmation_email=False, alert_confirmation_sms=False)
+    AmazonTracker(alert_confirmation_email=True, alert_confirmation_sms=False)
