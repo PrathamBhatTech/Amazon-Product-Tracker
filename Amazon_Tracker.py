@@ -96,13 +96,13 @@ class AmazonTracker:
         try:
             deal_price = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
 
-        except:
+        except AttributeError:
             pass
 
         try:
             price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
 
-        except:
+        except AttributeError:
             pass
 
         print("\nProduct ID: ", self.product_id)
@@ -112,6 +112,7 @@ class AmazonTracker:
         # Print the data if it is found in the code
         if deal_price:
             print('\tDeal Price =', deal_price)
+            self.final_price = deal_price
 
         if price:
             if type(self.price) == "<class 'bs4.element.Tag'>":
@@ -124,11 +125,14 @@ class AmazonTracker:
 
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):
-        if self.final_price <= self.maxPrice:
-            if self.alert_confirmation_email:
-                send_mail(self.to_addr, self.name, self.product_title, self.final_price, self.url)
-            if self.alert_confirmation_sms:
-                send_sms(self.name, self.product_title, self.final_price, self.number)
+        try:
+            if self.final_price <= self.maxPrice:
+                if self.alert_confirmation_email:
+                    send_mail(self.to_addr, self.name, self.product_title, self.final_price, self.url)
+                if self.alert_confirmation_sms:
+                    send_sms(self.name, self.product_title, self.final_price, self.number)
+        except AttributeError:
+            print("\n\tERROR: Could not access the price of the product")
 
 
 db = Database()
