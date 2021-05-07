@@ -1,5 +1,7 @@
 # Amazon Tracker
 
+## GUI IS NOT COMPLETE. PLEASE GO TO THE CUI BRANCH
+
 <b>Amazon Tracker</b> stores the product urls entered by the user and the email of the user and
 checks all the product data from the provided urls.<br>
 When the price falls below the max price an email and notification is sent to the user.
