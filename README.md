@@ -6,6 +6,14 @@ When the price falls below the max price an email and notification is sent to th
 <br><br><br>
 
 >### **User Manual:**
+* Install python 3.8 or 3.9 and pip<br>
+  References:
+        <ul>
+        <li>Install Python:<br>
+                https://www.youtube.com/watch?v=UvcQlPZ8ecA<br></li>
+        <li>Install pip:<br>
+                https://www.youtube.com/watch?v=AVCcFyYynQY<br></li>
+        </ul>
 
 * ```cd``` into the directory of the project and type: 
         ```
