@@ -16,7 +16,7 @@ while KeyboardInterrupt:
     if option == '1':
         db.get_product_params()
     elif option == '2':
-        print("Enter the sl number of the product you want deleted")
+        print("Enter the Product ID of the product you want deleted")
 
         product_id = int(input())
         db.remove_product(product_id)

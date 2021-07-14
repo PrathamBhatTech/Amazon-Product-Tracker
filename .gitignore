@@ -130,3 +130,6 @@ dmypy.json
 
 # Database file generated
 Database.db
+
+# Settings data by pycharm
+.idea

@@ -26,4 +26,4 @@ Contributors:
         > CUI for adding and removing urls
 
     Prateek Pangal Rao
-        > Sending SMS to user's phone for price drop alerts
+        > Sending SMS to user's phone for price drop alerts {DEPRECATED since this feature requires a subscription}
