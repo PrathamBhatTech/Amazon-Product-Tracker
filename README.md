@@ -40,3 +40,6 @@ When the price falls below the max price an email and notification is sent to th
 
 *Prateek Rao*
 * Sending SMS to user's phone for price drop alerts
+
+## Note:
+> The SMS function is still under development due to constraints and does not work yet.
