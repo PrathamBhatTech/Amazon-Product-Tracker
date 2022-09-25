@@ -1,6 +1,5 @@
 import os
 import telebot
-
-API_KEY = os.getenv('API_KEY')
-
-@bot.message_handler()
+from telethon.sync import TelegramClient
+from telethon.tl.types import InputPeerUser, InputPeerChannel
+from telethon import TelegramClient, sync, events
