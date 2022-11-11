@@ -2,7 +2,7 @@
 import requests
 
 # used to delay the code
-# from time import sleep
+from time import sleep
 
 # Used to parse data provided by requests to extract the data required
 from bs4 import BeautifulSoup
@@ -13,16 +13,22 @@ from OtherFunctions.MiscFunctions import *
 # Import the sql functions that access database
 from OtherFunctions.SQL_Functions import Database
 
+# Import functions to send mail
 from OtherFunctions.Send_Email import send_mail
 
 # Import module to send sms
-from OtherFunctions.Send_SMS import send_sms
+# from OtherFunctions.Send_SMS import send_sms
 
 
 class AmazonTracker:
     # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
     # and asks for user details and product urls
     def __init__(self, alert_confirmation_email=False, alert_confirmation_sms=False, loop=True, debug=False):
+        self.final_price = None
+        self.price = None
+        self.product_title = None
+        self.response = None
+
         self.alert_confirmation_email = alert_confirmation_email
         self.alert_confirmation_sms = alert_confirmation_sms
 
@@ -38,28 +44,38 @@ class AmazonTracker:
                 self.url = param[1]
                 self.maxPrice = int(param[2])
 
-                self.connect()
-                self.extract_data()
+                success = False
+                while not success:
+                    try:
+                        self.connect()
+                        self.extract_data()
 
-                self.send_alert()
+                        self.send_alert()
+                        success = True
+                    except Exception as e:
+                        print(e)
+                        print("Retrying in 1 minute")
+                        sleep(60)
 
             print('\n\nAll products have been checked\n')
+            print('Waiting for', self.check_freq, 'minutes before checking again\n\n')
 
             if not loop:
                 break
 
             print('Enter ctrl + c to exit code')
 
-            sleep(self.check_freq * 60)  # Stops the code process for 20 seconds
+            sleep(self.check_freq * 60)  # Stops the code process for the time specified in the parameter
 
     # connects to the webpage provided using the url
     def connect(self):
         if self.debug:
             print("\n\nPlease wait. We are attempting to connect to the product page")
 
-        # The headers are used to make the code imitate a browser and prevent amazon from block it access to the site.
+        # The headers are used to make the code imitate a browser and prevent amazon from blocking it access to the
+        # site.
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (HTML, like Gecko) Chrome/'
                           '71.0.3578.98 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
@@ -75,7 +91,7 @@ class AmazonTracker:
         if self.response:
             if self.debug:
                 print("Connected successfully\n\n")
-        else:
+        else:   
             print("Connection failed")
             exit()
 
@@ -83,50 +99,54 @@ class AmazonTracker:
     def extract_data(self):
         soup = BeautifulSoup(self.response.content, 'lxml')
 
-        deal_price = None
         price = None
 
         # Extracting data from the amazon html code
         self.product_title = soup.find(id='productTitle').get_text().strip()
-        availability = soup.find(id='availability').get_text().strip()  # In stock.
-
-        self.price = soup.find(id='price')
-
-        # Exception handling is used to prevent the code from crashing if the required data is missing
-        try:
-            deal_price = int(soup.find(id='priceblock_dealprice').get_text().strip()[2:-3].replace(',', ''))
-
-        except AttributeError:
-            pass
+        availability = soup.find(id='availability') # In stock.
 
         try:
-            price = int(soup.find(id='priceblock_ourprice').get_text().strip()[2:-3].replace(',', ''))
-
+            availability = availability.get_text().strip() 
         except AttributeError:
-            pass
+            availability = None
+
+        # Get the price of the product
+        try:
+            # ids = ['priceblock_ourprice', 'a-price', 'a-price-whole']
+
+            # for id__ in ids:
+            #     price = soup.find(id=id__) 
+
+            #     if price:
+            #         price = price.get_text().strip()
+            #         break
+                
+            if not price:
+                classes = ['a-price-whole']
+                for class__ in classes:
+                    price = soup.find('span', {'class': class__})
+                    if price:
+                        price = price.get_text().strip().replace(',', '').replace('.', '')
+                        break
+        except AttributeError as e:
+            print(e)
 
         print("\nProduct ID: ", self.product_id)
         print('\tProduct Title: ', self.product_title)
         print('\tAvailability: ', availability)
 
-        # Print the data if it is found in the code
-        if deal_price:
-            print('\tDeal Price =', deal_price)
-            self.final_price = deal_price
-
         if price:
-            if type(self.price) == "<class 'bs4.element.Tag'>":
-                self.final_price = deal_price
-            else:
-                self.final_price = price
-                print('\tPrice = ', price)
+            self.final_price = int(price)
+            print('\tPrice = ', price)
+        else:
+            print('\tPrice = Not available')
 
         print('\tMax price set by user = ', self.maxPrice)
 
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):
         try:
-            if self.final_price <= self.maxPrice:
+            if self.final_price and self.final_price <= self.maxPrice:
                 if self.alert_confirmation_email:
                     send_mail(self.to_addr, self.name, self.product_title, self.final_price, self.url)
                 if self.alert_confirmation_sms:
@@ -138,4 +158,4 @@ class AmazonTracker:
 db = Database()
 if __name__ == '__main__':
     # The one is telling the constructor to enable user alerts.
-    AmazonTracker(alert_confirmation_email=True, alert_confirmation_sms=False)
+    AmazonTracker(alert_confirmation_email=False, alert_confirmation_sms=False)

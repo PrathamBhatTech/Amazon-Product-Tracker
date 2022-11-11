@@ -11,7 +11,7 @@ User Manual:
 
     > Click on Amazon-Tracker.py and fill in the data asked.
 
-    > Whenever you want to check the products just click on this file.
+    > Whenever you want to check the products just run this file.
 
     > If you want to add new products or remove products later on, click on Product_Manager.py
       and follow the instructions.
@@ -25,5 +25,6 @@ Contributors:
         > Sending email if price drops below the threshold
         > CUI for adding and removing urls
 
-    Prateek Pangal Rao
-        > Sending SMS to user's phone for price drop alerts {DEPRECATED since this feature requires a subscription}
+[//]: # (    Prateek Pangal Rao)
+
+[//]: # (        > Sending SMS to user's phone for price drop alerts {DEPRECATED since this feature requires a subscription})

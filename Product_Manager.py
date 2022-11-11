@@ -16,10 +16,11 @@ while KeyboardInterrupt:
     if option == '1':
         db.get_product_params()
     elif option == '2':
-        print("Enter the Product ID of the product you want deleted")
+        print("Enter the Product ID of the product you want deleted\nTo remove multiple products enter them separated by a space")
 
-        product_id = int(input())
-        db.remove_product(product_id)
+        product_ids = input().split(' ')
+        for product_id in product_ids:
+            db.remove_product(int(product_id))
     elif option == '3':
         exit()
 

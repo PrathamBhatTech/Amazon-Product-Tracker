@@ -25,7 +25,7 @@ def send_mail(to_addr, name, product, price, product_link):
     msg['Subject'] = "Price Drop"
 
     # Getting the text from the text file and adding it to the text
-    with open('OtherFunctions/mail_message.md', 'r+') as f:
+    with open('../Assets/mail_message.md', 'r+') as f:
         message = f.read().format(name, product, price, product_link)
 
     msg.attach(MIMEText(message, 'plain'))

@@ -35,8 +35,8 @@ def get_check_freq():
 def clear():
     # for windows
     if name == 'nt':
-        _ = system('cls')
+        system('cls')
 
     # for mac and linux(here, os.name is 'posix')
     else:
-        _ = system('clear')
+        system('clear')

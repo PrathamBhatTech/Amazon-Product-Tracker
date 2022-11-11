@@ -11,6 +11,11 @@ from OtherFunctions.MiscFunctions import *
 class Database:
     def __init__(self):
         # If the file does not exist then create one and ask user for email and check frequency
+        self.c = None
+        self.con = None
+
+        self.database_path = "Assets/Database.db"
+
         if not self.file_exists():
             self.connect()
             self.create_tables()
@@ -25,9 +30,8 @@ class Database:
     '''
 
     # Checks if a given file exists
-    @staticmethod
-    def file_exists():
-        if os.path.isfile('OtherFunctions/Database.db'):
+    def file_exists(self):
+        if os.path.isfile(self.database_path):
             return True
         else:
             return False
@@ -35,7 +39,7 @@ class Database:
     # Attempts connection to the database file
     def connect(self):
         try:
-            self.con = sql.connect('OtherFunctions/Database.db')
+            self.con = sql.connect(self.database_path)
         except sql.Error:
             print(sql.Error)
             exit()
@@ -94,9 +98,9 @@ class Database:
     def remove_product(self, product_id):
         self.c.execute("DELETE FROM URL WHERE product_id = " + str(product_id))
         print("The product has been removed")
-        self.rearrange_accounts(int(product_id))
+        self.rearrange_products(int(product_id))
 
-    def rearrange_accounts(self, deleted_product_id):
+    def rearrange_products(self, deleted_product_id):
         for i in range(deleted_product_id, len(self.c.execute("SELECT product_id FROM URL").fetchall()) + 2):
             self.c.execute("UPDATE URL SET product_id = ? WHERE product_id = ?", (i - 1, i))
         self.con.commit()
