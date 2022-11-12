@@ -4,9 +4,6 @@ import requests
 # used to delay the code
 from time import sleep
 
-# used to get date and time for logging
-from datetime import datetime
-
 # log data
 import logging
 
