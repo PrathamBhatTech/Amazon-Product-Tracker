@@ -24,11 +24,11 @@ from OtherFunctions.Send_Email import send_mail
 
 
 logging.basicConfig(
-            filename='log.txt',
-            level=logging.DEBUG,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            filemode='a'
-        )
+    filename='amazon_product_tracker.log',
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    filemode='a'
+)
         
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
