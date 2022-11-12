@@ -4,6 +4,12 @@ import requests
 # used to delay the code
 from time import sleep
 
+# used to get date and time for logging
+from datetime import datetime
+
+# log data
+import logging
+
 # Used to parse data provided by requests to extract the data required
 from bs4 import BeautifulSoup
 
@@ -20,10 +26,21 @@ from OtherFunctions.Send_Email import send_mail
 # from OtherFunctions.Send_SMS import send_sms
 
 
+logging.basicConfig(
+            filename='log.txt',
+            level=logging.DEBUG,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            filemode='a'
+        )
+        
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
 class AmazonTracker:
     # Constructor of the class it checks if the database file exists, and if it doesn't it creates one
     # and asks for user details and product urls
     def __init__(self, alert_confirmation_email=False, alert_confirmation_sms=False, loop=True, debug=False):
+
         self.final_price = None
         self.price = None
         self.product_title = None
@@ -47,6 +64,7 @@ class AmazonTracker:
                 success = False
                 while not success:
                     try:
+                        logger.info('Connecting to ' + self.url)
                         self.connect()
                         self.extract_data()
 
@@ -54,7 +72,8 @@ class AmazonTracker:
                         success = True
                     except Exception as e:
                         print(e)
-                        print("Retrying in 1 minute")
+                        logger.critical(e, exc_info=True)
+                        print("Unable to connect to Amazon. Retrying in 1 minute")
                         sleep(60)
 
             print('\n\nAll products have been checked\n')
@@ -66,6 +85,7 @@ class AmazonTracker:
             print('Enter ctrl + c to exit code')
 
             sleep(self.check_freq * 60)  # Stops the code process for the time specified in the parameter
+        
 
     # connects to the webpage provided using the url
     def connect(self):
@@ -93,6 +113,7 @@ class AmazonTracker:
                 print("Connected successfully\n\n")
         else:   
             print("Connection failed")
+            logger.critical("Connection failed. Response code: " + str(self.response.status_code), exc_info=True)
             exit()
 
     # After the web page data is obtained the required data such as the product price is extracted.
@@ -148,14 +169,25 @@ class AmazonTracker:
         try:
             if self.final_price and self.final_price <= self.maxPrice:
                 if self.alert_confirmation_email:
+                    logger.info('Sending email to ' + self.to_addr)
                     send_mail(self.to_addr, self.name, self.product_title, self.final_price, self.url)
                 if self.alert_confirmation_sms:
+                    logger.info('Sending sms to ' + self.number)
                     send_sms(self.name, self.product_title, self.final_price, self.number)
         except AttributeError:
             print("\n\tERROR: Could not access the price of the product")
+            logger.error("Could not access the price of the product", exc_info=True)
 
 
-db = Database()
+logger.info('Starting Amazon Product Tracker...')
+logger.info('Connecting to sql database')
+try:
+    db = Database()
+except Exception as e:
+    print(e)
+    logger.critical(e, exc_info=True)
+    exit()
+
 if __name__ == '__main__':
     # The one is telling the constructor to enable user alerts.
     AmazonTracker(alert_confirmation_email=False, alert_confirmation_sms=False)
