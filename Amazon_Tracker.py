@@ -1,6 +1,9 @@
 # used to get the data from webpages when url is provided
 import requests
 
+# import app
+import app as app
+
 # used to delay the code
 from time import sleep
 
@@ -46,7 +49,6 @@ class AmazonTracker:
         self.alert_confirmation_email = alert_confirmation_email
         self.alert_confirmation_sms = alert_confirmation_sms
 
-        print('Accessing product data. If you are tracking many products this may take a while.')
         while KeyboardInterrupt:
             self.debug = debug
 
@@ -61,6 +63,7 @@ class AmazonTracker:
                 success = False
                 while not success:
                     try:
+                        self.product_data = ''
                         logger.info('Connecting to ' + self.url)
                         self.connect()
                         self.extract_data()
@@ -68,26 +71,26 @@ class AmazonTracker:
                         self.send_alert()
                         success = True
                     except Exception as e:
-                        print(e)
+                        #self.product_data+=e
                         logger.critical(e, exc_info=True)
-                        print("Unable to connect to Amazon. Retrying in 1 minute")
+                        #self.product_data+="Unable to connect to Amazon. Retrying in 1 minute"
                         sleep(60)
 
-            print('\n\nAll products have been checked\n')
-            print('Waiting for', self.check_freq, 'minutes before checking again\n\n')
+            #self.product_data+='\n\nAll products have been checked\n'
+            #self.product_data+=f'Waiting for {self.check_freq} minutes before checking again\n\n'
 
             if not loop:
                 break
 
-            print('Enter ctrl + c to exit code')
+            self.product_data+='Enter ctrl + c to exit code'
 
             sleep(self.check_freq * 60)  # Stops the code process for the time specified in the parameter
         
 
     # connects to the webpage provided using the url
     def connect(self):
-        if self.debug:
-            print("\n\nPlease wait. We are attempting to connect to the product page")
+        # if self.debug:
+            #self.product_data+="\n\nPlease wait. We are attempting to connect to the product page"
 
         # The headers are used to make the code imitate a browser and prevent amazon from blocking it access to the
         # site.
@@ -107,9 +110,9 @@ class AmazonTracker:
         # code proceeds only if the connection to the product page is successful
         if self.response:
             if self.debug:
-                print("Connected successfully\n\n")
+                self.product_data+="Connected successfully\n\n"
         else:   
-            print("Connection failed")
+            #self.product_data+="Connection failed"
             logger.critical("Connection failed. Response code: " + str(self.response.status_code), exc_info=True)
             exit()
 
@@ -147,19 +150,21 @@ class AmazonTracker:
                         price = price.get_text().strip().replace(',', '').replace('.', '')
                         break
         except AttributeError as e:
-            print(e)
+            self.product_data+=e
 
-        print("\nProduct ID: ", self.product_id)
-        print('\tProduct Title: ', self.product_title)
-        print('\tAvailability: ', availability)
+        #self.product_data+=f"\nProduct ID: {self.product_id}"
+        self.product_data+=f'\tProduct Title: {self.product_title}'
+        self.product_data+=f'\tAvailability: {availability}'
 
         if price:
             self.final_price = int(price)
-            print('\tPrice = ', price)
+            self.product_data+=f'\tPrice = {price}'
         else:
-            print('\tPrice = Not available')
+            self.product_data+='\tPrice = Not available'
 
-        print('\tMax price set by user = ', self.maxPrice)
+        self.product_data+=f'\tMax price set by user = {self.maxPrice}'
+
+        app.print(self.product_id, self.product_title, self.product_data)
 
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):
@@ -172,7 +177,7 @@ class AmazonTracker:
                     logger.info('Sending sms to ' + self.number)
                     send_sms(self.name, self.product_title, self.final_price, self.number)
         except AttributeError:
-            print("\n\tERROR: Could not access the price of the product")
+            self.product_data+="\n\tERROR: Could not access the price of the product"
             logger.error("Could not access the price of the product", exc_info=True)
 
 
@@ -181,10 +186,8 @@ logger.info('Connecting to sql database')
 try:
     db = Database()
 except Exception as e:
-    print(e)
+    self.product_data+=e
     logger.critical(e, exc_info=True)
     exit()
 
-if __name__ == '__main__':
-    # The one is telling the constructor to enable user alerts.
-    AmazonTracker(alert_confirmation_email=False, alert_confirmation_sms=False)
+AmazonTracker(alert_confirmation_email=False, alert_confirmation_sms=False)
