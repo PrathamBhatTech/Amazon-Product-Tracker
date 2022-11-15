@@ -1,6 +1,8 @@
 # used to get the data from webpages when url is provided
 import requests
 
+import os
+
 # used to delay the code
 from time import sleep
 
@@ -22,9 +24,10 @@ from OtherFunctions.Send_Email import send_mail
 # Import module to send sms
 # from OtherFunctions.Send_SMS import send_sms
 
+home = os.path.expanduser("~")
 
 logging.basicConfig(
-    filename='$HOME/amazon_product_tracker.log',
+    filename=f'{home}/amazon_product_tracker.log',
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     filemode='a'
