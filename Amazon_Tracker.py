@@ -24,7 +24,7 @@ from OtherFunctions.Send_Email import send_mail
 
 
 logging.basicConfig(
-    filename='$Home/amazon_product_tracker.log',
+    filename='$HOME/amazon_product_tracker.log',
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     filemode='a'
