@@ -1,8 +1,12 @@
+import streamlit as st
+st.set_page_config(layout="wide")
+
 # used to get the data from webpages when url is provided
 import requests
 
 # import app
-import app as app
+import OtherFunctions.streamlit_functions as streamlit_functions
+
 
 # used to delay the code
 from time import sleep
@@ -27,7 +31,7 @@ from OtherFunctions.Send_Email import send_mail
 
 
 logging.basicConfig(
-    filename='$Home/amazon_product_tracker.log',
+    filename='amazon_product_tracker.log',
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     filemode='a'
@@ -82,7 +86,7 @@ class AmazonTracker:
             if not loop:
                 break
 
-            self.product_data+='Enter ctrl + c to exit code'
+            streamlit_functions.complete()
 
             sleep(self.check_freq * 60)  # Stops the code process for the time specified in the parameter
         
@@ -164,7 +168,7 @@ class AmazonTracker:
 
         self.product_data+=f'\tMax price set by user = {self.maxPrice}'
 
-        app.print(self.product_id, self.product_title, self.product_data)
+        streamlit_functions.print(self.product_id, self.product_title, self.product_data)
 
     # Send alert to the user if price falls below the max price set by the user.
     def send_alert(self):

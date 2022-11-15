@@ -63,12 +63,8 @@ class Database:
 
         self.con.commit()
 
-    def get_product_params(self):
+    def get_product_params(self, url=None, max_price=None):
         while True:
-            url = input('Copy the url from the product page and paste it below\n')
-            max_price = input('Enter the max price of the product\n')
-
-            product_id = len(self.c.execute("SELECT product_id FROM URL").fetchall()) + 1
             if self.c.execute("SELECT product_id FROM URL").fetchone() == "1":
                 product_id -= 1
 
